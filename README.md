@@ -2,16 +2,22 @@
 
 Purpose of this project is to check for different flaws that can occur due to EAV and provide cleanup functions.
 
-Use --dry-run to check result without modifying data.
+Use `--dry-run` to check result without modifying data.
 
-# Magento 1 or Magento 2?
+Compatible with Magento 1 and OpenMage.
 
-The Magento 1 version is in this repository, the Magento 2 version is in [another repository](https://github.com/magento-hackathon/module-eavcleaner-m2).
+I have updated this to ensure it works with PHP 7/8, is installable via Composer and some other small changes. I changed the composer namespace to prevent confusion.
+
+All credits to original authors https://github.com/magento-hackathon/EAVCleaner
+
+### Installation
+
+` composer require icecubenz/magerun-eav-cleaner:dev-master`
 
 # Commands
 
 * `eav:check:models` Check if the assigned sourcemodel, backendmodel and frontendmodel still exist and if they are allowed to be used.
-* `eav:clean:product-attribute-set-values` Check for abandoned attribute values in eav tables. The attribute was removed from an attribute set the values still exist. 
+* `eav:clean:product-attribute-set-values` Check for abandoned attribute values in eav tables. The attribute was removed from an attribute set the values still exist.
 * `eav:clean:scope-values` Check for wrong scopes. Values in Scopes which shouldn't be present. For example values on Storeview level but attribute scope is global.
 * `eav:clean:removed-store-view-values` Remove attribute values for storeviews that don't exist anymore.
 * `eav:clean:entity-type-values` Remove attribute values with wrong entity_type_id. For example the table catalog_product_entity_int should only contain entries with entity_type_id == 10.
@@ -21,15 +27,9 @@ The Magento 1 version is in this repository, the Magento 2 version is in [anothe
 * `eav:attributes:remove-unused` Remove attributes with no values set in products and attributes that are not present in any attribute sets.
 * `eav:media:remove-unused` Remove unused product images.
 
-### Ideas
-
-See [issues labeled enhancement](https://github.com/magento-hackathon/EAVCleaner/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement)
-
-### Installation
-
-See the [magerun addon installation guide](https://github.com/netz98/n98-magerun/wiki/Modules#where-can-modules-be-placed)
 
 ### Contributors
+
 - Benno Lippert
 - Damian Luszczymak
 - Joke Puts
