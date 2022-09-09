@@ -1,4 +1,5 @@
 <?php
+
 namespace FIREGENTO\Magento\Command\Eav;
 
 use Symfony\Component\Console\Input\InputInterface;
@@ -29,7 +30,7 @@ class CleanUpScopeValuesCommand extends AbstractCommand
 
         $isDryRun = $input->getOption('dry-run');
 
-        if(!$isDryRun) {
+        if (!$isDryRun) {
             $output->writeln('WARNING: this is not a dry run. If you want to do a dry-run, add --dry-run.');
             $question = new ConfirmationQuestion('Are you sure you want to continue? [No] ', false);
 
@@ -50,7 +51,8 @@ class CleanUpScopeValuesCommand extends AbstractCommand
                 $prodTable = $this->_prefixTable('catalog_product_entity_' . $type);
                 $attrTable = $this->_prefixTable('catalog_eav_attribute');
 
-                $count = $db->fetchOne("SELECT COUNT(*)"
+                $count = $db->fetchOne(
+                    "SELECT COUNT(*)"
                     . " FROM $prodTable"
                     . " INNER JOIN $attrTable ON $attrTable.attribute_id = $prodTable.attribute_id"
                     . " WHERE $prodTable.store_id != 0 AND $attrTable.is_global = 1"
@@ -59,7 +61,8 @@ class CleanUpScopeValuesCommand extends AbstractCommand
                 $output->writeln("Clean up $count rows in $prodTable");
 
                 if (!$isDryRun) {
-                    $db->query("DELETE $prodTable.* FROM $prodTable"
+                    $db->query(
+                        "DELETE $prodTable.* FROM $prodTable"
                         . " INNER JOIN $attrTable ON $attrTable.attribute_id = $prodTable.attribute_id"
                         . " WHERE $prodTable.store_id != 0 AND $attrTable.is_global = 1"
                     );

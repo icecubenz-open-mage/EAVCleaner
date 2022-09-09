@@ -18,7 +18,8 @@ abstract class AbstractCommand extends \FIREGENTO\Magento\Command\AbstractComman
      * @param string|array $messages
      * @param int $type
      */
-    protected function verboseWriteLine(OutputInterface $output, $messages, $type = OutputInterface::OUTPUT_NORMAL) {
+    protected function verboseWriteLine(OutputInterface $output, $messages, $type = OutputInterface::OUTPUT_NORMAL)
+    {
         if ($output->getVerbosity() > OutputInterface::VERBOSITY_NORMAL) {
             $output->writeln($messages, $type);
         }
@@ -31,7 +32,8 @@ abstract class AbstractCommand extends \FIREGENTO\Magento\Command\AbstractComman
      * @param OutputInterface $output
      * @param array $results array of associative arrays. The array keys are column names, as strings.
      */
-    protected function printVerboseQueryResult(InputInterface $input, OutputInterface $output, $results) {
+    protected function printVerboseQueryResult(InputInterface $input, OutputInterface $output, $results)
+    {
         if ($output->getVerbosity() > OutputInterface::VERBOSITY_NORMAL && count($results) > 0) {
             $headers = array_keys($results[0]);
 

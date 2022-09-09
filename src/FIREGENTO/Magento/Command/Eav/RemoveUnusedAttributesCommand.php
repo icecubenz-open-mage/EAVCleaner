@@ -32,7 +32,7 @@ class RemoveUnusedAttributesCommand extends AbstractCommand
 
         $isDryRun = $input->getOption('dry-run');
 
-        if(!$isDryRun) {
+        if (!$isDryRun) {
             $output->writeln('WARNING: this is not a dry run. If you want to do a dry-run, add --dry-run.');
             $question = new ConfirmationQuestion('Are you sure you want to continue? [No] ', false);
 
@@ -53,23 +53,23 @@ class RemoveUnusedAttributesCommand extends AbstractCommand
             $eavAttributeTable = $this->_prefixTable('eav_attribute');
             $eavEntityAttributeTable = $this->_prefixTable('eav_entity_attribute');
 
-            foreach($attributes as $attribute) {
+            foreach ($attributes as $attribute) {
                 $table = $this->_prefixTable('catalog_product_entity_' . $attribute['backend_type']);
 
                 /* Look for attributes that have no values set in products */
                 $attributeValues = $db->fetchOne('SELECT COUNT(*) FROM ' . $table . ' WHERE attribute_id = ?', array($attribute['attribute_id']));
-                if($attributeValues == 0) {
+                if ($attributeValues == 0) {
                     $output->writeln($attribute['attribute_code'] . ' has ' . $attributeValues . ' values; deleting attribute');
-                    if(!$isDryRun) {
+                    if (!$isDryRun) {
                         $db->query('DELETE FROM ' . $eavAttributeTable . ' WHERE attribute_code = ?', $attribute['attribute_code']);
                     }
                     $deleted++;
                 } else {
                     /* Look for attributes that are not assigned to attribute sets */
                     $attributeGroups = $db->fetchOne('SELECT COUNT(*) FROM ' . $eavEntityAttributeTable . ' WHERE attribute_id = ?', array($attribute['attribute_id']));
-                    if($attributeGroups == 0) {
+                    if ($attributeGroups == 0) {
                         $output->writeln($attribute['attribute_code'] . ' is not assigned to any attribute set; deleting attribute and its ' . $attributeValues . ' orphaned value(s)');
-                        if(!$isDryRun) {
+                        if (!$isDryRun) {
                             $db->query('DELETE FROM ' . $eavAttributeTable . ' WHERE attribute_code = ?', $attribute['attribute_code']);
                         }
                         $deleted++;

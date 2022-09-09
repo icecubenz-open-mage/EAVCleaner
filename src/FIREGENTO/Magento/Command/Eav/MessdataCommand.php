@@ -3,7 +3,9 @@
     namespace FIREGENTO\Magento\Command\Eav;
 
     use N98\Magento\Command\AbstractMagentoCommand;
+
     use Symfony\Component\Console\Input\InputInterface;
+
     use Symfony\Component\Console\Output\OutputInterface;
 
     class MessdataCommand extends AbstractCommand
@@ -29,12 +31,10 @@
                 $this->_addAttributeValues();
                 $this->_addWrongDefaultValues();
             }
-
         }
 
         protected function _addAttribute($attributeCode)
         {
-
             $data = array(
                 'entity_type_id' =>  4,
                 'attribute_code' => $attributeCode,
@@ -51,8 +51,6 @@
             $setup->removeAttribute('4', $attributeCode);
 
             $eav = $this->_getEavAttributeResourceModel()->setData($data)->save();
-
-
         }
 
 
@@ -62,8 +60,7 @@
             $productCollection = $this->getProductCollection();
 
             $i = 1;
-            foreach ($productCollection as $product)
-            {
+            foreach ($productCollection as $product) {
                 $product->addAttributeUpdate('messed_up_attribute_code', 'value ' . $i, $storeId);
                 $i++;
             }
@@ -77,7 +74,7 @@
             $productCollection = $this->getProductCollection();
             $product = $productCollection->getFirstItem();
 
-            $this->_addAttributeToAttributeSet($product->getAttributeSetId(),$attributeCodeToMessUp);
+            $this->_addAttributeToAttributeSet($product->getAttributeSetId(), $attributeCodeToMessUp);
 
             $product->addAttributeUpdate($attributeCodeToMessUp, 'value ', 0);
             foreach (\Mage::app()->getStores() as $store) {
@@ -127,7 +124,4 @@
         {
             return $this->_getResourceModel('catalog/product_collection', 'Mage_Catalog_Model_Resource_Product_Collection');
         }
-
-
     }
-

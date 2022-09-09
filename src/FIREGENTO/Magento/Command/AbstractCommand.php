@@ -22,8 +22,6 @@ class AbstractCommand extends \N98\Magento\Command\AbstractMagentoCommand
         return $resource->getTableName($tbl);
     }
 
-
-
     protected function _info($message)
     {
         $this->_output->writeln("<info>$message</info>");

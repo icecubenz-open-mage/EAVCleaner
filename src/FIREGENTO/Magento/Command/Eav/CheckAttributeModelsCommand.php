@@ -31,7 +31,6 @@ class CheckAttributeModelsCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
         $sourceModelsAllowed = array('select', 'multiselect', 'hidden');
 
         $this->detectMagento($output);
@@ -62,24 +61,24 @@ class CheckAttributeModelsCommand extends AbstractCommand
                     $testFrontendModel = \Mage::getModel($frontendModel);
                     if (!$testFrontendModel) {
                         $error .= '<error>frontend-model doesn\'t exist: ' . $attribute->getFrontendModel() . '</error>';
-                    }}
+                    }
+                }
 
                 if ($sourceModel != '' && ! in_array($attribute->getFrontendInput(), $sourceModelsAllowed)) {
                     $additionalMessage = null;
-                    if($attribute->getSourceModel() == 'eav/entity_attribute_source_boolean' && $attribute->getFrontendInput() != 'select') {
+                    if ($attribute->getSourceModel() == 'eav/entity_attribute_source_boolean' && $attribute->getFrontendInput() != 'select') {
                         $additionalMessage = ' - the frontend input type should be select';
                     }
                     $error .= '<error>sourcemodel ' . $attribute->getSourceModel() . ' not allowed for frontend input type: ' . $attribute->getFrontendInput() . $additionalMessage . '</error>';
-                }
-                else if ($sourceModel != '') {
+                } elseif ($sourceModel != '') {
                     $testSourceModel = \Mage::getModel($sourceModel);
                     if (!$testSourceModel) {
                         $error .= '<error>source-model doesn\'t exist: ' . $attribute->getSourceModel() . '</error>';
-                    }}
+                    }
+                }
 
 
-                if ($error != '')
-                {
+                if ($error != '') {
                     $row = array();
                     $row[] = $attribute->getAttributeCode();
                     $row[] = $attribute->getId();

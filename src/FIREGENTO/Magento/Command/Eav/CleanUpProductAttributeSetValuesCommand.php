@@ -10,7 +10,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class CleanUpProductAttributeSetValuesCommand extends AbstractCommand
 {
-    const BATCH_SIZE = 1000;
+    public const BATCH_SIZE = 1000;
 
     protected $_isDryRun;
 
@@ -74,40 +74,39 @@ class CleanUpProductAttributeSetValuesCommand extends AbstractCommand
 
         $connection = $this->_isDryRun ? $this->_getWriteConnection() : $this->_getReadConnection();
 
-        foreach ($attributeSetList as $attributeSet){
-
+        foreach ($attributeSetList as $attributeSet) {
             $attributeSetId = $attributeSet['id'];
             $attributeSetName = $attributeSet['name'];
 
             $attributesIdsForAttributeSet = $this->_getAttributeIdsForAttributeSet($attributeSetId);
             $attributeIdsToClean = array_diff($userDefinedAttributeIds, $attributesIdsForAttributeSet);
-            if (!count($attributeIdsToClean)){
+            if (!count($attributeIdsToClean)) {
                 continue;
             }
             $attributeIdsToCleanFilter = implode(',', $attributeIdsToClean);
 
             $productIds = $this->_getProductIdsForAttributeSet($attributeSetId);
             $productQty = count($productIds);
-            if (!$productQty){
+            if (!$productQty) {
                 continue;
             }
 
             $this->_info('');
             $this->_info(
-                sprintf('%s products found in "%s" attribute set.',
+                sprintf(
+                    '%s products found in "%s" attribute set.',
                     $productQty,
                     $attributeSetName
                 )
             );
             $this->_info('Looking for messy data...');
 
-            while (count($productIds)){
-
+            while (count($productIds)) {
                 $batchSize = self::BATCH_SIZE;
                 $queueProductIds = array_splice($productIds, 0, $batchSize);
                 $queueProductsFilter = implode(',', $queueProductIds);
 
-                if ($productQty > $batchSize){
+                if ($productQty > $batchSize) {
                     $this->_info(
                         sprintf(
                             "\tBatch of %s products (%s in queue)...",
@@ -118,7 +117,6 @@ class CleanUpProductAttributeSetValuesCommand extends AbstractCommand
                 }
 
                 foreach ($allowedAttributeTypes as $attributeType) {
-
                     if ($this->_isDryRun) {
                         $sql = 'SELECT COUNT(*) FROM `';
                     } else {

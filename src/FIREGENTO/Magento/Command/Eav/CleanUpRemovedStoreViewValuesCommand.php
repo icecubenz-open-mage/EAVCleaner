@@ -1,4 +1,5 @@
 <?php
+
 namespace FIREGENTO\Magento\Command\Eav;
 
 use Symfony\Component\Console\Input\InputInterface;
@@ -29,7 +30,7 @@ class CleanUpRemovedStoreViewValuesCommand extends AbstractCommand
 
         $isDryRun = $input->getOption('dry-run');
 
-        if(!$isDryRun) {
+        if (!$isDryRun) {
             $output->writeln('WARNING: this is not a dry run. If you want to do a dry-run, add --dry-run.');
             $question = new ConfirmationQuestion('Are you sure you want to continue? [No] ', false);
 
@@ -50,15 +51,17 @@ class CleanUpRemovedStoreViewValuesCommand extends AbstractCommand
                 $prodTable = $this->_prefixTable('catalog_product_entity_' . $type);
                 $storeTable = $this->_prefixTable('core_store');
 
-                $count = $db->fetchOne("SELECT COUNT(*)"
+                $count = $db->fetchOne(
+                    "SELECT COUNT(*)"
                     . " FROM $prodTable"
                     . " WHERE $prodTable.store_id NOT IN (SELECT $storeTable.store_id FROM $storeTable)"
                 );
 
                 $output->writeln("Clean up $count rows in $prodTable");
-                
+
                 if (!$isDryRun) {
-                    $db->query("DELETE joker FROM $prodTable AS joker"
+                    $db->query(
+                        "DELETE joker FROM $prodTable AS joker"
                         . " WHERE joker.store_id NOT IN (SELECT $storeTable.store_id FROM $storeTable)"
                     );
                 }

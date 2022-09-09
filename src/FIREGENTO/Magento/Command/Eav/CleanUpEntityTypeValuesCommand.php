@@ -1,4 +1,5 @@
 <?php
+
 namespace FIREGENTO\Magento\Command\Eav;
 
 use Symfony\Component\Console\Input\InputInterface;
@@ -37,7 +38,7 @@ class CleanUpEntityTypeValuesCommand extends AbstractCommand
 
         $isDryRun = $input->getOption('dry-run');
 
-        if(!$isDryRun) {
+        if (!$isDryRun) {
             $output->writeln('WARNING: this is not a dry run. If you want to do a dry-run, add --dry-run.');
             $question = new ConfirmationQuestion('Are you sure you want to continue? [No] ', false);
 
@@ -54,7 +55,7 @@ class CleanUpEntityTypeValuesCommand extends AbstractCommand
             $db = $resource->getConnection('core_write');
             $types = array('varchar', 'int', 'decimal', 'text', 'datetime');
             $entityTypeCodes = array('catalog_product', 'catalog_category', 'customer', 'customer_address');
-            foreach($entityTypeCodes as $code) {
+            foreach ($entityTypeCodes as $code) {
                 $entityType = \Mage::getModel('eav/entity_type')->loadByCode($code);
                 $output->writeln("<info>Cleaning values for $code where entity_type_id != " . $entityType->getEntityTypeId() . "</info>");
                 foreach ($types as $type) {

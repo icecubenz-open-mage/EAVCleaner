@@ -1,4 +1,5 @@
 <?php
+
 namespace FIREGENTO\Magento\Command\Eav;
 
 use Symfony\Component\Console\Input\InputInterface;
@@ -37,7 +38,7 @@ class CleanUpAttributesAndValuesWithoutParentCommand extends AbstractCommand
 
         $isDryRun = $input->getOption('dry-run');
 
-        if(!$isDryRun) {
+        if (!$isDryRun) {
             $output->writeln('WARNING: this is not a dry run. If you want to do a dry-run, add --dry-run.');
             $question = new ConfirmationQuestion('Are you sure you want to continue? [No] ', false);
 
@@ -54,7 +55,7 @@ class CleanUpAttributesAndValuesWithoutParentCommand extends AbstractCommand
             $db = $resource->getConnection('core_write');
             $types = array('varchar', 'int', 'decimal', 'text', 'datetime');
             $entityTypeCodes = array($this->_prefixTable('catalog_product'), $this->_prefixTable('catalog_category'), $this->_prefixTable('customer'), $this->_prefixTable('customer_address'));
-            foreach($entityTypeCodes as $code) {
+            foreach ($entityTypeCodes as $code) {
                 $entityType = \Mage::getModel('eav/entity_type')->loadByCode($code);
                 $output->writeln("<info>Cleaning values for $code</info>");
                 //removing attribute values
@@ -73,8 +74,6 @@ class CleanUpAttributesAndValuesWithoutParentCommand extends AbstractCommand
                         . " FROM `$eavTable` where entity_type_id = " . $entityType->getEntityTypeId() . ")");
                     }
                 }
-
-
             }
             //cleaning catalog_eav_attribute
             $output->writeln("<info>Cleaning orphaned attributes from catalog_eav_attribute</info>");
@@ -87,7 +86,6 @@ class CleanUpAttributesAndValuesWithoutParentCommand extends AbstractCommand
             if (!$isDryRun && count($results) > 0) {
                 $db->query("DELETE FROM " . $this->_prefixTable('catalog_eav_attribute') . " WHERE `attribute_id` not in(SELECT attribute_id FROM `" . $this->_prefixTable('eav_attribute') . "`)");
             }
-
         }
     }
 }

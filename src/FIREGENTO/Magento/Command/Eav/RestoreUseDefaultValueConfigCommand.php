@@ -1,4 +1,5 @@
 <?php
+
 namespace FIREGENTO\Magento\Command\Eav;
 
 use Symfony\Component\Console\Input\InputInterface;
@@ -29,7 +30,7 @@ class RestoreUseDefaultValueConfigCommand extends AbstractCommand
 
         $isDryRun = $input->getOption('dry-run');
 
-        if(!$isDryRun) {
+        if (!$isDryRun) {
             $output->writeln('WARNING: this is not a dry run. If you want to do a dry-run, add --dry-run.');
             $question = new ConfirmationQuestion('Are you sure you want to continue? [No] ', false);
 
@@ -49,11 +50,11 @@ class RestoreUseDefaultValueConfigCommand extends AbstractCommand
             $db = $resource->getConnection('core_write');
 
             $configData = $db->fetchAll('SELECT DISTINCT path, value FROM ' . $this->_prefixTable('core_config_data') . ' WHERE scope_id = 0');
-            foreach($configData as $config) {
+            foreach ($configData as $config) {
                 $count = $db->fetchOne('SELECT COUNT(*) FROM ' . $this->_prefixTable('core_config_data') .' WHERE path = ? AND BINARY value = ?', array($config['path'], $config['value']));
-                if($count > 1) {
+                if ($count > 1) {
                     $output->writeln('Config path ' . $config['path'] . ' with value ' . $config['value']. ' has ' . $count . ' values; deleting non-default values');
-                    if(!$isDryRun) {
+                    if (!$isDryRun) {
                         $db->query('DELETE FROM ' . $this->_prefixTable('core_config_data') . ' WHERE path = ? AND BINARY value = ? AND scope_id != ?', array($config['path'], $config['value'], 0));
                     }
                     $removedConfigValues += ($count-1);
